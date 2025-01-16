@@ -1,0 +1,89 @@
+Terraform $ terraform destroy
+aws_instance.virginia_instance: Refreshing state... [id=i-0fcc84c48fe58fddd]
+aws_instance.ohio_instance: Refreshing state... [id=i-07ecd21eed5f380a2]
+
+
+aws_instance.ohio_instance: Destroying... [id=i-07ecd21eed5f380a2]
+aws_instance.virginia_instance: Destroying... [id=i-0fcc84c48fe58fddd]
+aws_instance.ohio_instance: Still destroying... [id=i-07ecd21eed5f380a2, 10s elapsed]
+aws_instance.virginia_instance: Still destroying... [id=i-0fcc84c48fe58fddd, 10s elapsed]
+aws_instance.ohio_instance: Still destroying... [id=i-07ecd21eed5f380a2, 20s elapsed]
+aws_instance.virginia_instance: Still destroying... [id=i-0fcc84c48fe58fddd, 20s elapsed]
+aws_instance.ohio_instance: Still destroying... [id=i-07ecd21eed5f380a2, 30s elapsed]
+aws_instance.virginia_instance: Still destroying... [id=i-0fcc84c48fe58fddd, 30s elapsed]
+aws_instance.ohio_instance: Still destroying... [id=i-07ecd21eed5f380a2, 40s elapsed]
+aws_instance.virginia_instance: Still destroying... [id=i-0fcc84c48fe58fddd, 40s elapsed]
+aws_instance.ohio_instance: Still destroying... [id=i-07ecd21eed5f380a2, 50s elapsed]
+aws_instance.virginia_instance: Still destroying... [id=i-0fcc84c48fe58fddd, 50s elapsed]
+aws_instance.ohio_instance: Still destroying... [id=i-07ecd21eed5f380a2, 1m0s elapsed]
+aws_instance.virginia_instance: Still destroying... [id=i-0fcc84c48fe58fddd, 1m0s elapsed]
+aws_instance.virginia_instance: Destruction complete after 1m3s
+aws_instance.ohio_instance: Destruction complete after 1m3s
+
+Destroy complete! Resources: 2 destroyed.
+
+Terraform $ nano my_ec2.tf
+provider "aws" {
+  region = "us-east-1" # Set your desired region
+}
+
+# Create an EC2 instance
+resource "aws_instance" "virginia_instance" {
+  ami           = "ami-xxxxxxxxxxxxxxxxx" # Replace with the correct AMI ID
+  instance_type = "t2.micro" # Choose the instance type you want
+
+  tags = {
+    Name = "MyEC2Instance"
+  }
+}
+
+# Allocate an Elastic IP
+resource "aws_eip" "virginia_eip" {
+  instance = aws_instance.virginia_instance.id
+  vpc      = true
+}
+
+# Optionally, create a security group (if needed)
+resource "aws_security_group" "virginia_sg" {
+  name_prefix = "virginia_sg_"
+  description = "Allow all inbound traffic"
+  
+  ingress {
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  egress {
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+Terraform $ terraform validate
+╷
+│ Warning: Argument is deprecated
+│ 
+│   with aws_eip.virginia_eip,
+│   on my_ec2.tf line 18, in resource "aws_eip" "virginia_eip":
+│   18:   vpc      = true
+│ 
+│ use domain attribute instead
+╵
+Success! The configuration is valid, but there were some validation warnings as shown above.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+aws_instance.virginia_instance: Creating...
+aws_instance.virginia_instance: Still creating... [10s elapsed]
+
+
+
+

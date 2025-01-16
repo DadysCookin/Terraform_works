@@ -1,0 +1,126 @@
+Terraform $ terraform destroy
+aws_instance.virginia_instance: Refreshing state... [id=i-005fa309546f64059]
+aws_eip.virginia_eip: Refreshing state... [id=eipalloc-04895f9787a04dbab]
+
+
+aws_eip.virginia_eip: Destroying... [id=eipalloc-04895f9787a04dbab]
+aws_eip.virginia_eip: Destruction complete after 3s
+aws_instance.virginia_instance: Destroying... [id=i-005fa309546f64059]
+aws_instance.virginia_instance: Still destroying... [id=i-005fa309546f64059, 10s elapsed]
+aws_instance.virginia_instance: Still destroying... [id=i-005fa309546f64059, 20s elapsed]
+aws_instance.virginia_instance: Still destroying... [id=i-005fa309546f64059, 30s elapsed]
+aws_instance.virginia_instance: Still destroying... [id=i-005fa309546f64059, 40s elapsed]
+aws_instance.virginia_instance: Still destroying... [id=i-005fa309546f64059, 50s elapsed]
+aws_instance.virginia_instance: Still destroying... [id=i-005fa309546f64059, 1m0s elapsed]
+aws_instance.virginia_instance: Still destroying... [id=i-005fa309546f64059, 1m10s elapsed]
+aws_instance.virginia_instance: Destruction complete after 1m12s
+
+Destroy complete! Resources: 2 destroyed.
+
+
+Terraform $ nano my_ec2.tf
+provider "aws" {
+  region = "us-east-1" # Set your desired region
+}
+
+# Step 1: Create a new VPC
+resource "aws_vpc" "my_vpc" {
+  cidr_block = "10.0.0.0/16"  # Define your VPC CIDR block
+
+  tags = {
+    Name = "MyVPC"
+  }
+}
+
+# Step 2: Create an Internet Gateway for the VPC
+resource "aws_internet_gateway" "my_igw" {
+  vpc_id = aws_vpc.my_vpc.id
+
+  tags = {
+    Name = "MyInternetGateway"
+  }
+}
+
+# Step 3: Create a public subnet
+resource "aws_subnet" "my_subnet" {
+  vpc_id                  = aws_vpc.my_vpc.id
+  cidr_block              = "10.0.1.0/24" # Subnet CIDR
+  availability_zone       = "us-east-1a"   # Choose an availability zone
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "MyPublicSubnet"
+  }
+}
+
+# Step 4: Create a Route Table for the subnet
+resource "aws_route_table" "my_route_table" {
+  vpc_id = aws_vpc.my_vpc.id
+
+
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.my_igw.id
+  }
+
+  tags = {
+    Name = "MyRouteTable"
+  }
+}
+
+# Step 5: Associate the Route Table with the Subnet
+resource "aws_route_table_association" "my_route_table_assoc" {
+  subnet_id      = aws_subnet.my_subnet.id
+  route_table_id = aws_route_table.my_route_table.id
+}
+
+# Step 6: Create a security group allowing inbound SSH (port 22)
+resource "aws_security_group" "my_sg" {
+  vpc_id = aws_vpc.my_vpc.id
+
+  egress {
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "MySecurityGroup"
+  }
+}
+
+# Step 7: Create an EC2 instance inside the VPC
+resource "aws_instance" "my_ec2" {
+  ami           = "ami-xxxxxxxxxxxxxxxxx"  # Replace with the correct AMI ID for the region
+  instance_type = "t2.micro"  # You can adjust this based on your needs
+
+  subnet_id              = aws_subnet.my_subnet.id
+  security_groups        = [aws_security_group.my_sg.name]
+  associate_public_ip_address = true
+
+  tags = {
+    Name = "MyEC2Instance"
+  }
+
+  key_name = "my-key-pair"  # Replace with your actual key pair name for SSH access
+}
+
+
+Destroy complete! Resources: 2 destroyed.
+Terraform $ nano my_ec2.tf
+Terraform $ terraform validate
+Success! The configuration is valid.
+
+Terraform $ terraform destroy
+
+
+
