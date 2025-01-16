@@ -6,8 +6,8 @@ Terraform $ sudo ./aws/install
 Terraform $ aws --version
 aws-cli/2.23.0 Python/3.12.6 Linux/6.8.0-51-generic exe/x86_64.ubuntu.24
 Terraform $ aws configure
-AWS Access Key ID [None]: AKIAQLSIVRSDHPHHJGGQ
-AWS Secret Access Key [None]: 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
+AWS Access Key ID [None]: XXXXXXXXXXXXXXXXXXXX
+AWS Secret Access Key [None]: XXXXXXXXXXXXXXXXXXXXX
 Default region name [None]: us-east-2 #ohio region
 Default output format [None]: text
 Terraform $ curl -fsSL https://releases.hashicorp.com/terraform/1.5.7/terraform_1.5.7_linux_amd64.zip -o terraform.zip
