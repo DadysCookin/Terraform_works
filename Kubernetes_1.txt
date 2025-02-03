@@ -1,0 +1,54 @@
+Kubernetes_Lab $ 
+Kubernetes_Lab $ 
+Kubernetes_Lab $ 
+Kubernetes_Lab $ 
+Kubernetes_Lab $ 
+Kubernetes_Lab $ kuberadm --version
+Command 'kuberadm' not found, did you mean:
+  command 'kubeadm' from snap kubeadm (1.31.5)
+See 'snap info <snapname>' for additional versions.
+Kubernetes_Lab $ kubeadm --version
+unknown flag: --version
+To see the stack trace of this error execute with --v=5 or higher
+Kubernetes_Lab $ kubeadm -version
+invalid argument "ersion" for "-v, --v" flag: strconv.ParseInt: parsing "ersion": invalid syntax
+To see the stack trace of this error execute with --v=5 or higher
+Kubernetes_Lab $ kubeadm version
+kubeadm version: &version.Info{Major:"1", Minor:"29", GitVersion:"v1.29.13", GitCommit:"9a58e9398d4aa69d7ad40f40407e54b96025e0c5", GitTreeState:"clean", BuildDate:"2025-01-15T14:41:15Z", GoVersion:"go1.22.10", Compiler:"gc", Platform:"linux/amd64"}
+Kubernetes_Lab $ 
+Kubernetes_Lab $ 
+
+
+root@master-node:/home/devops# sudo systemctl status kubelet
+● kubelet.service - kubelet: The Kubernetes Node Agent
+     Loaded: loaded (/usr/lib/systemd/system/kubelet.service; enabled; preset: enabled)
+    Drop-In: /usr/lib/systemd/system/kubelet.service.d
+             └─10-kubeadm.conf
+     Active: active (running) since Mon 2025-02-03 15:36:17 IST; 16s ago
+       Docs: https://kubernetes.io/docs/
+   Main PID: 4937 (kubelet)
+      Tasks: 14 (limit: 4614)
+     Memory: 26.8M (peak: 27.6M)
+        CPU: 2.160s
+     CGroup: /system.slice/kubelet.service
+             └─4937 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf --config=/var/lib/kubelet/config.yaml --co>
+
+Feb 03 15:36:18 master-node kubelet[4937]: I0203 15:36:18.409577    4937 reconciler_common.go:258] "operationExecutor.VerifyControllerAttachedVolume started for volume \"flexvolume-di>
+Feb 03 15:36:18 master-node kubelet[4937]: I0203 15:36:18.409706    4937 reconciler_common.go:258] "operationExecutor.VerifyControllerAttachedVolume started for volume \"ca-certs\" (U>
+Feb 03 15:36:18 master-node kubelet[4937]: I0203 15:36:18.409918    4937 reconciler_common.go:258] "operationExecutor.VerifyControllerAttachedVolume started for volume \"etc-pki\" (Un>
+Feb 03 15:36:18 master-node kubelet[4937]: I0203 15:36:18.409956    4937 reconciler_common.go:258] "operationExecutor.VerifyControllerAttachedVolume started for volume \"ca-certs\" (U>
+Feb 03 15:36:18 master-node kubelet[4937]: I0203 15:36:18.410009    4937 reconciler_common.go:258] "operationExecutor.VerifyControllerAttachedVolume started for volume \"etc-ca-certif>
+Feb 03 15:36:18 master-node kubelet[4937]: I0203 15:36:18.871642    4937 apiserver.go:52] "Watching apiserver"
+Feb 03 15:36:18 master-node kubelet[4937]: I0203 15:36:18.895460    4937 desired_state_of_world_populator.go:159] "Finished populating initial desired state of world"
+Feb 03 15:36:19 master-node kubelet[4937]: I0203 15:36:18.999467    4937 pod_container_deletor.go:80] "Container not found in pod's containers" containerID="f1f95d635dde153e1cac1090bc>
+Feb 03 15:36:19 master-node kubelet[4937]: I0203 15:36:19.006036    4937 pod_container_deletor.go:80] "Container not found in pod's containers" containerID="a0a05da01ccea1e76b14d8929d>
+Feb 03 15:36:19 master-node kubelet[4937]: I0203 15:36:19.012333    4937 pod_container_deletor.go:80] "Container n
+
+root@master-node:/home/devops# free -h
+               total        used        free      shared  buff/cache   available
+Mem:           3.8Gi       1.4Gi       617Mi        44Mi       2.0Gi       2.4Gi
+Swap:             0B          0B          0B
+root@master-node:/home/devops# 
+
+
+
